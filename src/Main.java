@@ -47,7 +47,7 @@ public class Main extends PApplet {
 	boolean onlyOneTime = true;
 	String WORD="";
 	String URL="";
-	
+
 
 	static	int[] EntryValues = new int[10];
 	static	Spider spider;
@@ -121,13 +121,15 @@ public class Main extends PApplet {
 					  check=true;
 					  spider = new Spider();
 				      spider.search(URL,WORD);
-				 				      submit.setText("Crawled");
+				      submit.setText("Crawled");
 				      submit.setEnabled(false);
 				      urls = spider.getUrls();
 				      arrayOfUrls = new String[urls.size()];
 						arrayOfUrls =  urls.toArray(arrayOfUrls);
-					  loadData();	
-					     check=false;
+						//    loadData();
+						thread("loadData");
+						delay(5000);
+						check=false;
 					     
 
 					    urlList.setEnabled(true);
@@ -200,9 +202,9 @@ public class Main extends PApplet {
 	
 		String[] urls= arrayOfUrls;
 		
-		webPage= GUI.getUrl();
-		keyword= GUI.getWord();
-		lines = loadStrings("http://www.jmit.ac.in");
+	//	webPage= GUI.getUrl();
+		//keyword= GUI.getWord();
+		lines = loadStrings(URL);
 		
 		for(int i=1;i<urls.length;i++)
 		{ 
@@ -217,7 +219,10 @@ public class Main extends PApplet {
 		
        tokens = splitTokens(parsedText," @#$&*+-?><.,;:'\"");
 	
-       System.out.println(tokens);
+       for(String t:tokens){
+    	   System.out.print(t+" ");
+       }
+       //System.out.println("Tokens are "+tokens);
        concordance = new IntDict();
 		
 		
@@ -288,7 +293,7 @@ public class Main extends PApplet {
     	      // The size is the count
     	      int fsize = constrain(count, 0, 48);
     	      textSize(fsize);
-    	     if(keyword.equals(word))
+    	     if(WORD.equals(word))
     	     {
     	    	 fill(0,0,255);
     	    	
