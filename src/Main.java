@@ -125,14 +125,14 @@ public class Main extends PApplet {
 				      submit.setEnabled(false);
 				      urls = spider.getUrls();
 				      arrayOfUrls = new String[urls.size()];
-						arrayOfUrls =  urls.toArray(arrayOfUrls);
-						//    loadData();
-						thread("loadData");
-						delay(5000);
-						check=false;
+					  arrayOfUrls =  urls.toArray(arrayOfUrls);
+				      loadData();
+						
+						
+					  check=false;
 					     
 
-					    urlList.setEnabled(true);
+					  urlList.setEnabled(true);
 					     
 				}
 			
