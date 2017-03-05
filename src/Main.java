@@ -218,10 +218,6 @@ public class Main extends PApplet {
 		
        tokens = splitTokens(parsedText," @#$&*+-?><.,;:'\"");
 	
-       for(String t:tokens){
-    	   System.out.print(t+" ");
-       }
-    
        concordance = new IntDict();
 		
 		

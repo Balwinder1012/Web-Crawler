@@ -1,13 +1,6 @@
-import org.jsoup.safety.*;
-import org.jsoup.examples.*;
-import org.jsoup.helper.*;
-
-import java.awt.*;
 import java.io.IOException;
 import java.util.LinkedList;
-
 import org.jsoup.*;
-import org.jsoup.parser.*;
 import org.jsoup.select.*;
 import org.jsoup.nodes.*;
 public class SpiderLeg
@@ -28,14 +21,16 @@ public class SpiderLeg
      *            - The URL to visit
      * @return whether or not the crawl was successful
      */
+    
+    
     public boolean crawl(String url)
     {
         try
         {
             Connection connection = Jsoup.connect(url).userAgent(USER_AGENT);
+         
             htmlDocument = connection.get();
-//            Document htmlDocument = connection.get();
-//            this.htmlDocument = htmlDocument;
+
             if(connection.response().statusCode() == 200) // 200 is the HTTP OK status code
                                                           // indicating that everything is great.
             {
@@ -50,7 +45,7 @@ public class SpiderLeg
             System.out.println("Found (" + linksOnPage.size() + ") links");
             for(Element link : linksOnPage)
             {
-                this.links.add(link.absUrl("href"));
+                links.add(link.absUrl("href"));
             }
             return true;
         }
@@ -73,20 +68,20 @@ public class SpiderLeg
     public boolean searchForWord(String searchWord)
     {
         // Defensive coding. This method should only be used after a successful crawl.
-        if(this.htmlDocument == null)
+        if(htmlDocument == null)
         {
             System.out.println("ERROR! Call crawl() before performing analysis on the document");
             return false;
         }
         System.out.println("Searching for the word " + searchWord + "...");
-        String bodyText = this.htmlDocument.body().text();
+        String bodyText = htmlDocument.body().text();
         return bodyText.toLowerCase().contains(searchWord.toLowerCase());
     }
 
 
     public LinkedList<String> getLinks()
     {
-        return this.links;
+        return links;
     }
 
 }

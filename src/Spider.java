@@ -6,10 +6,12 @@ import processing.core.PApplet;
 public class Spider extends PApplet{
 
 	 static final int MAX_PAGES_TO_SEARCH = 10;
+	 
+	 
      Set<String> pagesVisited = new HashSet<String>();
      List<String> pagesToVisit = new LinkedList<String>();
-	 int counter =0;
-	// ArrayList<String> allWords = new ArrayList<String>();
+	 
+     int counter =0;
 	 String[] allWords;
 	 ArrayList<String> urls = new ArrayList<String>();
 
@@ -18,42 +20,44 @@ public class Spider extends PApplet{
         String nextUrl;
         do
         {
-            nextUrl = this.pagesToVisit.remove(0);
-        } while(this.pagesVisited.contains(nextUrl));
-        this.pagesVisited.add(nextUrl);
-       // addWords(nextUrl);
+            nextUrl = pagesToVisit.remove(0);
+        } while(pagesVisited.contains(nextUrl));
+        pagesVisited.add(nextUrl);
+      
         return nextUrl;
     }
 	
     public void search(String url, String searchWord)
     {
-        while(this.pagesVisited.size() < MAX_PAGES_TO_SEARCH)
+        while(pagesVisited.size() < MAX_PAGES_TO_SEARCH)
         {
             String currentUrl;
             SpiderLeg leg = new SpiderLeg();
-            if(this.pagesToVisit.isEmpty())
+            if(pagesToVisit.isEmpty())
             {
                 currentUrl = url;
-                this.pagesVisited.add(url);
+                pagesVisited.add(url);
             
             }
             else
             {
                 currentUrl = nextUrl();
             }
-            leg.crawl(currentUrl); // Lots of stuff happening here. Look at the crawl method in
+            boolean sucessfullyCrawled = leg.crawl(currentUrl); // Lots of stuff happening here. Look at the crawl method in
                                    // SpiderLeg
+            if(sucessfullyCrawled){
             boolean success = leg.searchForWord(searchWord);
             if(success)
             {
                 System.out.println(String.format("**Success** Word %s found at %s", searchWord, currentUrl));
-               // break;
                 counter++;
                 urls.add(currentUrl);
             }
-            this.pagesToVisit.addAll(leg.getLinks());
+            pagesToVisit.addAll(leg.getLinks());
+            
+            }
         }
-        System.out.println(String.format("**Done** Visited %s web page(s), Word found " + counter + " no. of times", this.pagesVisited.size()));
+        System.out.println(String.format("**Done** Visited %s web page(s), Word found " + counter + " no. of times", pagesVisited.size()));
     }
     
     ArrayList<String> getUrls(){
