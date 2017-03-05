@@ -5,7 +5,7 @@ import java.util.*;
 import processing.core.PApplet;
 public class Spider extends PApplet{
 
-	 static final int MAX_PAGES_TO_SEARCH = 10;
+	 static final int MAX_PAGES_TO_SEARCH = 3;
 	 
 	 
      Set<String> pagesVisited = new HashSet<String>();

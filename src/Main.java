@@ -7,6 +7,7 @@ import java.awt.FlowLayout;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.util.ArrayList;
 
 
@@ -14,6 +15,7 @@ import org.jsoup.*;
 
 
 import javax.swing.*;
+
 public class Main extends PApplet {
 
 	
@@ -44,13 +46,16 @@ public class Main extends PApplet {
 	boolean check= false;
 	//This flag is used in loadGraphData 
 	boolean check1 = true;
-	
+	//This flag is used to draw Load Graph only one time
+	boolean onlyOneTime = true;
 	
 	String WORD="";
 	String URL="";
 
 
-	static	int[] EntryValues = new int[10];
+	static	int[] EntryValues;  //used for loadGraphData();
+	String[] EntryKeys;	
+	int noOfGraphElem = 7;
 	static	Spider spider;
 	static	String[] tokens;
 	static	ArrayList<String> urls = new ArrayList<String>();
@@ -90,7 +95,6 @@ public class Main extends PApplet {
 	  word = new JTextField("jmit");
 	  word.setPreferredSize(new Dimension(150,20));
 	  frame.add(word);
-
 	  WORD = word.getText();
 	  URL = url.getText();
 	  submit = new JButton("Crawl");
@@ -161,7 +165,13 @@ public class Main extends PApplet {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					loadGraphData();
+					try {
+						loadGraphData();
+					} 
+					catch (IOException e1) {
+						
+						e1.printStackTrace();
+					}
 					select = 2;
 
 					  				}
@@ -232,7 +242,7 @@ public class Main extends PApplet {
 	
 	 case 1: drawurlList(); break;
 	
-	 case 2: drawGraph();  break;
+	 case 2: if(onlyOneTime) {drawGraph();  onlyOneTime=false; }  break;
 	 
 	 case 3: drawflowingWords(); break; 
 	 
@@ -327,19 +337,25 @@ public class Main extends PApplet {
     	 
     }    	 
     
-    public void loadGraphData(){
+    public void loadGraphData() throws IOException{
     	 int i=0;
-		    concordance.sortValuesReverse(); 
-		  for (String word : concordance.keyArray()) {
+		    
+    	 
+    	 EntryValues = new int[noOfGraphElem];
+    	 EntryKeys = new String[noOfGraphElem];
+    	 concordance.sortValuesReverse(); 
+		 
+    	 for (String word : concordance.keyArray()) {
 		    
 		    int count = concordance.get(word);
 		       
 		    EntryValues[i] = count;
+		    EntryKeys[i] = word;
 		    //list.add(Entry);
 		    
 		    iD.set(word,EntryValues[i]);
 		    i++;
-		    if(i>=10)
+		    if(i>=noOfGraphElem)
 		    {
 		      check1=false;
 		     break;
@@ -347,10 +363,20 @@ public class Main extends PApplet {
 		    }
 		    
 		  }
-		    println("Total no of words : "+ tokens.length);
-		    println("No. of Words displayed "+ginti);
-		    println(iD);
-		    printArray(EntryValues);
+    	 
+    	    new PieChart(EntryValues,EntryKeys,noOfGraphElem);
+    	    
+    	    
+    	    
+    	    JFrame frame = new JFrame();
+    	    frame.setSize(600,640);
+    	   
+    	    frame.add(new JLabel(new ImageIcon("PieChart.jpeg")));
+    	    frame.setVisible(true);
+    
+    	    
+		    
+		    select=0;
     	
     }
 	public void drawurlList(){
