@@ -31,9 +31,6 @@ public class Main extends PApplet {
 	JLabel B;
 	static	PImage image;
 	
-	
-	String webPage;
-	String keyword;
 	String[] lines;
 	int select=0;
 	String[] arrayOfUrls;
@@ -42,9 +39,13 @@ public class Main extends PApplet {
 	int ginti=0;
 	IntDict concordance;
 	IntDict iD;
+	
+	//This flag is used for gui animation
 	boolean check= false;
+	//This flag is used in loadGraphData 
 	boolean check1 = true;
-	boolean onlyOneTime = true;
+	
+	
 	String WORD="";
 	String URL="";
 
@@ -201,9 +202,7 @@ public class Main extends PApplet {
 	public  void loadData(){
 	
 		String[] urls= arrayOfUrls;
-		
-	//	webPage= GUI.getUrl();
-		//keyword= GUI.getWord();
+	
 		lines = loadStrings(URL);
 		
 		for(int i=1;i<urls.length;i++)
@@ -222,7 +221,7 @@ public class Main extends PApplet {
        for(String t:tokens){
     	   System.out.print(t+" ");
        }
-       //System.out.println("Tokens are "+tokens);
+    
        concordance = new IntDict();
 		
 		
@@ -382,14 +381,13 @@ public class Main extends PApplet {
   
 	}
 	
+	//The Initial Canvas
 	public void drawDefault(){
 		image(image,0,0);
 		if(check){
 		fill(255);
 		stroke(0,0,255);
 		rect(300,550,280,20);
-		
-		
 	
 		fill(0);	
 		rect(303+x,553,15,15);
@@ -403,9 +401,3 @@ public class Main extends PApplet {
 		
 	}
 }
-
-
-
-
-
-
