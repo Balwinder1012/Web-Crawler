@@ -87,6 +87,7 @@ public class Main extends PApplet {
 	  //GUI#######################################################################################################################################	
 	  image = loadImage("C://Users//Saini//workspace//WebCrawler//src//wc.jpg");	
 	  
+	  //new GUI();
 	  frame = new JFrame();
 	  frame.setSize(new Dimension(500,100));
 	  frame.setLayout(new FlowLayout());
@@ -460,10 +461,7 @@ public class Main extends PApplet {
 		rect(300,550,280,20);
 	
 		fill(0);	
-		/*
-		
-		
-		*/
+	
 		
 		int X = (int)map(process,0,MAX_PAGES_TO_SEARCH,0,277);
 		rect(303, 553 , X , 15);

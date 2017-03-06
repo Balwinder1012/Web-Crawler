@@ -2,6 +2,7 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -75,21 +76,22 @@ public class GUI extends Main {
 
 					@Override
 					public void actionPerformed(ActionEvent e) {
-						
-						  check=true;
-						  spider = new Spider();
+						check=true;
+						  URL = url.getText();
+						  WORD = word.getText();
+						  spider = new Spider(MAX_PAGES_TO_SEARCH);
 					      spider.search(URL,WORD);
-					 	  submit.setText("Crawled");
+					      submit.setText("Crawled");
 					      submit.setEnabled(false);
 					      urls = spider.getUrls();
 					      arrayOfUrls = new String[urls.size()];
-							arrayOfUrls =  urls.toArray(arrayOfUrls);
-							callLoadData();			
-							//loadData();	
-						     check=false;
+						  arrayOfUrls =  urls.toArray(arrayOfUrls);
+						  check=false;
+						  motionCheck= true;
+						  loadData();    
+						  motionCheck= false;
+						  urlList.setEnabled(true);
 						     
-
-						    urlList.setEnabled(true);
 						     
 					}
 				
@@ -120,13 +122,19 @@ public class GUI extends Main {
 
 					@Override
 					public void actionPerformed(ActionEvent e) {
-						loadGraphData();
-					
+						try {
+							loadGraphData();
+						} 
+						catch (IOException e1) {
+							
+							e1.printStackTrace();
+						}
 						select = 2;
 
 						  				}
 				
-		  });
+		  }); 
+		  
 		  
 		  
 		  flowingWords.addActionListener(
