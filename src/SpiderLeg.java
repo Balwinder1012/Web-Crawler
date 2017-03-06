@@ -9,9 +9,11 @@ public class SpiderLeg
     private static final String USER_AGENT = "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/535.1 (KHTML, like Gecko) Chrome/13.0.782.112 Safari/535.1";
     
     private LinkedList<String> links = new LinkedList<String>();
+    private LinkedList<String> finalLinks = new LinkedList<String>();
     
     private Document htmlDocument;
-
+    
+    private String mainUrl="";
 
     /**
      * This performs all the work. It makes an HTTP request, checks the response, and then gathers
@@ -23,8 +25,21 @@ public class SpiderLeg
      */
     
     
-    public boolean crawl(String url)
+    
+    public SpiderLeg(String mainUrl){
+    	
+    	this.mainUrl = mainUrl;
+    
+    	
+    	
+    	
+    }
+    
+	public boolean crawl(String url)
     {
+    	
+    	
+    	
         try
         {
             Connection connection = Jsoup.connect(url).userAgent(USER_AGENT);
@@ -81,7 +96,41 @@ public class SpiderLeg
 
     public LinkedList<String> getLinks()
     {
-        return links;
+    	
+    	onlyRelativeUrls();
+    	
+    	
+        return finalLinks;
+    }
+    
+void onlyRelativeUrls(){
+    	
+    	String sub = mainUrl.substring(0, 9);
+    	
+    	String[] sites = links.toArray(new String[links.size()]);
+    	
+    	for(String s: sites){
+    		
+    		String sub1 = s.substring(0,9);
+    		if(sub1.equals(sub)){
+    		
+    			
+    			if(   (s.length() - mainUrl.length()) >2){
+    				
+    				finalLinks.add(s);
+    				System.out.println("Link found " + s);
+    				
+    			}
+    			
+    		
+    		}
+    		
+    		
+    		
+    		
+    	}
+    		
+    	
     }
 
 }

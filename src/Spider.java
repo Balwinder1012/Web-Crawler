@@ -5,7 +5,7 @@ import java.util.*;
 import processing.core.PApplet;
 public class Spider extends PApplet{
 
-	 static final int MAX_PAGES_TO_SEARCH = 3;
+	 static final int MAX_PAGES_TO_SEARCH = 7;
 	 
 	 
      Set<String> pagesVisited = new HashSet<String>();
@@ -14,7 +14,10 @@ public class Spider extends PApplet{
      int counter =0;
 	 String[] allWords;
 	 ArrayList<String> urls = new ArrayList<String>();
-
+	 
+	 String searchWord= "";
+	 String url="";
+	
    String nextUrl()
     {
         String nextUrl;
@@ -29,10 +32,12 @@ public class Spider extends PApplet{
 	
     public void search(String url, String searchWord)
     {
+    	this.url = url;
+    	this.searchWord = searchWord;
         while(pagesVisited.size() < MAX_PAGES_TO_SEARCH)
         {
             String currentUrl;
-            SpiderLeg leg = new SpiderLeg();
+            SpiderLeg leg = new SpiderLeg(url);
             if(pagesToVisit.isEmpty())
             {
                 currentUrl = url;
@@ -61,8 +66,9 @@ public class Spider extends PApplet{
     }
     
     ArrayList<String> getUrls(){
-    	
     	return(urls);
     }
+    
+    
     
 }

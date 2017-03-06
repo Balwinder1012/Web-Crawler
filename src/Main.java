@@ -229,12 +229,34 @@ public class Main extends PApplet {
        tokens = splitTokens(parsedText," @#$&*+-?><.,;:'\"");
 	
        concordance = new IntDict();
-		
+       
+       
+       ArrayList<String> al = new ArrayList<String>();
+       
+       al = checkTokens();
+       
+       tokens = al.toArray(new String[al.size()]);
 		
 	}
 	
 	
-	
+	public ArrayList<String> checkTokens(){
+		
+		ArrayList<String> al = new ArrayList<String>();
+		for(String t: tokens)
+		{
+			
+			if(t.length()>3){
+				
+				al.add(t);
+			}
+			
+			
+			
+		}
+		
+	return al;	
+	}
 	
 	public void draw(){
 
