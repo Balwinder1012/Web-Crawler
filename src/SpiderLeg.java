@@ -88,7 +88,7 @@ public class SpiderLeg
             System.out.println("ERROR! Call crawl() before performing analysis on the document");
             return false;
         }
-        System.out.println("Searching for the word " + searchWord + "...");
+        System.out.println("Searching for the word " + searchWord + " ...");
         String bodyText = htmlDocument.body().text();
         return bodyText.toLowerCase().contains(searchWord.toLowerCase());
     }
@@ -105,32 +105,62 @@ public class SpiderLeg
     
 void onlyRelativeUrls(){
     	
-    	String sub = mainUrl.substring(0, 9);
+	    String sub = mainUrl.substring(7,9);
     	
     	String[] sites = links.toArray(new String[links.size()]);
     	
+    	
     	for(String s: sites){
+    		try{
     		
-    		String sub1 = s.substring(0,9);
-    		if(sub1.equals(sub)){
+    	
+    		
+    		
     		
     			
-    			if(   (s.length() - mainUrl.length()) >2){
-    				
-    				finalLinks.add(s);
-    				System.out.println("Link found " + s);
-    				
-    			}
+    			if((s.length() - mainUrl.length()) >2)
+    			   
+    				if(!s.endsWith("jpg")){
+    					
+    					//if(sub1.equals(sub) ){
+    			    		if(s.startsWith("http://")  )
+    			    		{
+    			    			String sub1 = s.substring(7,9);
+    			    			if(sub1.equals(sub)){
+    					
+    			    				finalLinks.add(s);
+    			    			}
+    			    			
+    					    }
+    			    		if(s.startsWith("https://")){
+    			    			
+    			    			String sub1 = s.substring(8,10);
+    			    			if(sub1.equals(sub)){
+    		    					
+    			    				finalLinks.add(s);
+    			    			}
+    			    			
+    			    			
+    			    		}
+    					
     			
+    			
+    					
+    				}
+    						
     		
     		}
     		
-    		
-    		
-    		
-    	}
+    	
+    	
+		catch(Exception e){
+			
+			System.out.println(s);
+		}
     		
     	
     }
-
+    	
+    	
+}
 }

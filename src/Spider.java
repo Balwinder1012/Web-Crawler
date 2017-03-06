@@ -2,10 +2,10 @@
 import java.util.*;
 
 
-import processing.core.PApplet;
-public class Spider extends PApplet{
 
-	 static final int MAX_PAGES_TO_SEARCH = 7;
+public class Spider extends Main{
+
+	 int MAX_PAGES_TO_SEARCH = 0;
 	 
 	 
      Set<String> pagesVisited = new HashSet<String>();
@@ -17,9 +17,14 @@ public class Spider extends PApplet{
 	 
 	 String searchWord= "";
 	 String url="";
+	 int processCounter = 0;
 	
-   String nextUrl()
-    {
+	 public Spider(int no){
+		 MAX_PAGES_TO_SEARCH = no;
+	 }
+	 
+     String nextUrl()
+     {
         String nextUrl;
         do
         {
@@ -36,6 +41,7 @@ public class Spider extends PApplet{
     	this.searchWord = searchWord;
         while(pagesVisited.size() < MAX_PAGES_TO_SEARCH)
         {
+        	
             String currentUrl;
             SpiderLeg leg = new SpiderLeg(url);
             if(pagesToVisit.isEmpty())
@@ -48,21 +54,45 @@ public class Spider extends PApplet{
             {
                 currentUrl = nextUrl();
             }
+            
             boolean sucessfullyCrawled = leg.crawl(currentUrl); // Lots of stuff happening here. Look at the crawl method in
                                    // SpiderLeg
             if(sucessfullyCrawled){
+            	
             boolean success = leg.searchForWord(searchWord);
+            
             if(success)
             {
                 System.out.println(String.format("**Success** Word %s found at %s", searchWord, currentUrl));
+                System.out.println();
                 counter++;
                 urls.add(currentUrl);
             }
-            pagesToVisit.addAll(leg.getLinks());
+            
+            
+            LinkedList<String>  ll = new LinkedList<String>();
+            
+            
+            ll=leg.getLinks();
+            
+            /*
+            System.out.println(ll.size());
+            String test[] = new String[ll.size()];
+            test = ll.toArray(new String[ll.size()]);
+            for(String t: test)	
+            System.out.print(t+" ");
+            	
+            */
+        
+            
+            pagesToVisit.addAll(ll);
             
             }
+           
+            super.process++; 
         }
         System.out.println(String.format("**Done** Visited %s web page(s), Word found " + counter + " no. of times", pagesVisited.size()));
+        
     }
     
     ArrayList<String> getUrls(){

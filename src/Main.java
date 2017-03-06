@@ -42,8 +42,14 @@ public class Main extends PApplet {
 	IntDict concordance;
 	IntDict iD;
 	
-	//This flag is used for gui animation
+	static int process=0;
+	
+	int MAX_PAGES_TO_SEARCH= 10;
+	//These flags are used for gui animation
 	boolean check= false;
+	boolean motionCheck = false;
+	
+	
 	//This flag is used in loadGraphData 
 	boolean check1 = true;
 	//This flag is used to draw Load Graph only one time
@@ -53,12 +59,12 @@ public class Main extends PApplet {
 	String URL="";
 
 
-	static	int[] EntryValues;  //used for loadGraphData();
+	int[] EntryValues;  //used for loadGraphData();
 	String[] EntryKeys;	
 	int noOfGraphElem = 7;
-	static	Spider spider;
-	static	String[] tokens;
-	static	ArrayList<String> urls = new ArrayList<String>();
+	Spider spider;
+	String[] tokens;
+	ArrayList<String> urls = new ArrayList<String>();
 	
 	
 	//#######################################################################################################################################
@@ -86,17 +92,20 @@ public class Main extends PApplet {
 	  frame.setLayout(new FlowLayout());
 	  A = new JLabel("Enter Url:   ");
 	  frame.add(A);
-	  url = new  JTextField("http://jmit.ac.in/");
+	  url = new  JTextField("http://");
+	  
 	  url.setPreferredSize(new Dimension(150,20));
 	  frame.add(url);
 	  B = new JLabel("Enter Word:  ");
 	  
 	  frame.add(B);
-	  word = new JTextField("jmit");
+	  word = new JTextField();
 	  word.setPreferredSize(new Dimension(150,20));
 	  frame.add(word);
-	  WORD = word.getText();
-	  URL = url.getText();
+	//  WORD = word.getText();
+	 
+	  
+	  System.out.println(URL + " " + WORD);
 	  submit = new JButton("Crawl");
 	  	
 	  
@@ -124,19 +133,19 @@ public class Main extends PApplet {
 				public void actionPerformed(ActionEvent e) {
 					
 					  check=true;
-					  spider = new Spider();
+					  URL = url.getText();
+					  WORD = word.getText();
+					  spider = new Spider(MAX_PAGES_TO_SEARCH);
 				      spider.search(URL,WORD);
 				      submit.setText("Crawled");
 				      submit.setEnabled(false);
 				      urls = spider.getUrls();
 				      arrayOfUrls = new String[urls.size()];
 					  arrayOfUrls =  urls.toArray(arrayOfUrls);
-				      loadData();
-						
-						
 					  check=false;
-					     
-
+					  motionCheck= true;
+					  loadData();    
+					  motionCheck= false;
 					  urlList.setEnabled(true);
 					     
 				}
@@ -152,7 +161,7 @@ public class Main extends PApplet {
 			        			
 	                select =1;		
 	                flowingWords.setEnabled(true);
-	                graph.setEnabled(true);
+	                
 	
 				}
 			
@@ -184,6 +193,7 @@ public class Main extends PApplet {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
+					graph.setEnabled(true);
 					select = 3;
 
 					  
@@ -247,10 +257,11 @@ public class Main extends PApplet {
 		{
 			
 			if(t.length()>3){
+				if(checkNumsInWords(t)){   // It eliminates all the words containing number, We can add 3,4..9 to eliminate all 
 				
 				al.add(t);
 			}
-			
+			}
 			
 			
 		}
@@ -258,13 +269,25 @@ public class Main extends PApplet {
 	return al;	
 	}
 	
+	public boolean checkNumsInWords(String t){
+		
+		if((t.contains("0") || t.contains("1") ||  t.contains("2") ||
+			t.contains("3") ||  t.contains("4")||  t.contains("5") ||
+			t.contains("6") || t.contains("7")||  t.contains("5") ||
+			t.contains("9")))
+		return false;
+		
+		else	
+		return true;
+	}
 	public void draw(){
 
+	
 	switch(select){
 	
 	 case 1: drawurlList(); break;
 	
-	 case 2: if(onlyOneTime) {drawGraph();  onlyOneTime=false; }  break;
+	
 	 
 	 case 3: drawflowingWords(); break; 
 	 
@@ -280,12 +303,7 @@ public class Main extends PApplet {
 		
 	
 	}
-	public void drawGraph(){
-		
-		
-		
-		
-	}
+	
 	
     public void	drawflowingWords(){
    	
@@ -355,8 +373,7 @@ public class Main extends PApplet {
     	  } 
  	
     
-    	 
-    	 
+    	
     }    	 
     
     public void loadGraphData() throws IOException{
@@ -411,7 +428,7 @@ public class Main extends PApplet {
     stroke(255,0,0);
     strokeWeight(3);
     
-    textSize(16);
+    textSize(12);
     
      
     int y=20;
@@ -428,20 +445,63 @@ public class Main extends PApplet {
 	//The Initial Canvas
 	public void drawDefault(){
 		image(image,0,0);
+		
+		int info = MAX_PAGES_TO_SEARCH;	
+		String i = "Pages To Crawl : "+info;
+		textSize(16);
+		fill(0);
+		text(i,20,30);	
+			
+			
 		if(check){
+			
 		fill(255);
 		stroke(0,0,255);
 		rect(300,550,280,20);
 	
 		fill(0);	
-		rect(303+x,553,15,15);
+		/*
 		
-		if(303+x < width-40)
-			x=x+2;
-		else
-			x=0;
+		
+		*/
+		
+		int X = (int)map(process,0,MAX_PAGES_TO_SEARCH,0,277);
+		rect(303, 553 , X , 15);
 	
 		}
 		
-	}
+		if(motionCheck){
+
+			fill(255);
+			stroke(0,0,255);
+			rect(300,550,280,20);
+			fill(0);
+			rect(303+x,553,15,15);
+			
+			if(303+x < width-40)
+				x=x+2;
+			else
+				x=0;
+		
+			}
+			
+		}
+	
+	
+	public void keyPressed() {
+		  if (key == CODED) {
+			  
+		    if (keyCode == UP ) 
+		    	MAX_PAGES_TO_SEARCH++; 
+		    
+		    if (keyCode == DOWN && MAX_PAGES_TO_SEARCH >1) 
+		    	MAX_PAGES_TO_SEARCH--;
+		     
+		  } 
+		}
+
+	
+	
 }
+
+
